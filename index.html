@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AMINE · Anime & Film</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Inter", sans-serif;
+    }
+
+    :root {
+      --bg-main: #121212;
+      --bg-panel: #1c1c1c;
+      --bg-hover: #232323;
+      --bg-card: #1a1a1a;
+      --text-main: #e5e5e5;
+      --text-muted: #9a9a9a;
+      --text-soft: #bdbdbd;
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --shadow: 0 8px 24px rgba(0,0,0,0.6);
+    }
+
+    html, body {
+      height: 100%;
+      background: var(--bg-main);
+      color: var(--text-main);
+    }
+
+    body {
+      display: flex;
+    }
+
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg-main); }
+    ::-webkit-scrollbar-thumb { background: #333; border-radius: 8px; }
+
+    .sidebar {
+      width: 220px;
+      padding: 28px 20px;
+      background: var(--bg-main);
+      flex-shrink: 0;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .logo {
+      font-size: 20px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      margin-bottom: 32px;
+      color: #fff;
+    }
+
+    .sidebar nav {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      flex: 1;
+    }
+
+    .sidebar nav a {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 14px;
+      border-radius: var(--radius-sm);
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: background .15s ease, color .15s ease;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .sidebar nav a i { width: 20px; height: 20px; }
+    .sidebar nav a:hover,
+    .sidebar nav a.active {
+      background: var(--bg-panel);
+      color: #fff;
+    }
+
+    .sidebar-profile {
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid #222;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .sidebar-profile .user {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .sidebar-profile .avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #2a2a2a;
+      display: grid;
+      place-items: center;
+      font-weight: 600;
+      font-size: 16px;
+      color: #fff;
+      border: 2px solid #3a3a3a;
+    }
+
+    .sidebar-profile .user-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar-profile .user-info .name {
+      font-weight: 500;
+      font-size: 14px;
+    }
+
+    .sidebar-profile .user-info .status {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .sidebar-profile .profile-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .sidebar-profile .profile-actions button {
+      flex: 1;
+      background: var(--bg-panel);
+      border: none;
+      color: var(--text-muted);
+      padding: 8px 6px;
+      border-radius: 20px;
+      font-size: 11px;
+      cursor: pointer;
+      transition: background .2s, color .2s;
+      border: 1px solid #2a2a2a;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      line-height: 1;
+    }
+
+    .sidebar-profile .profile-actions button i {
+      width: 16px;
+      height: 16px;
+      display: block;
+    }
+
+    .sidebar-profile .profile-actions button span {
+      display: block;
+      font-size: 10px;
+      font-weight: 500;
+    }
+
+    .sidebar-profile .profile-actions button:hover {
+      background: #2a2a2a;
+      color: #fff;
+    }
+
+    .main {
+      flex: 1;
+      padding: 24px 30px 30px 30px;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      overflow-y: auto;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .topbar input {
+      width: 320px;
+      padding: 10px 18px;
+      border-radius: 40px;
+      background: var(--bg-panel);
+      border: 1px solid #2a2a2a;
+      color: #fff;
+      font-size: 13px;
+      transition: border .2s;
+    }
+
+    .topbar input:focus {
+      outline: none;
+      border-color: #555;
+    }
+    .topbar input::placeholder { color: #888; }
+
+    .profile-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: var(--bg-panel);
+      display: grid;
+      place-items: center;
+      font-size: 14px;
+      font-weight: 500;
+      border: 1px solid #2a2a2a;
+    }
+
+    .content {
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: 28px;
+      height: 380px;
+      margin-bottom: 40px;
+    }
+
+    .hero {
+      position: relative;
+      height: 100%;
+      border-radius: var(--radius-lg);
+      background: linear-gradient(145deg, #2a2a2a, #121212);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    .hero .hero-bg {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      opacity: 0.35;
+      transition: opacity 0.6s ease;
+    }
+
+    .hero-bottom {
+      position: absolute;
+      left: 40px;
+      right: 40px;
+      bottom: 36px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      z-index: 2;
+    }
+
+    .tag {
+      font-size: 11px;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    .hero h2 {
+      font-size: 36px;
+      font-weight: 600;
+      letter-spacing: .5px;
+      line-height: 1.1;
+    }
+
+    .hero p {
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--text-soft);
+      max-width: 420px;
+    }
+
+    .hero button {
+      align-self: flex-start;
+      background: #fff;
+      color: #000;
+      border: none;
+      padding: 12px 28px;
+      border-radius: 30px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform .15s, box-shadow .2s;
+    }
+
+    .hero button:hover {
+      transform: scale(1.02);
+      box-shadow: 0 6px 20px rgba(255,255,255,0.15);
+    }
+
+    .right-slider {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .slide {
+      display: flex;
+      gap: 14px;
+      padding: 10px;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: background .15s ease, transform .1s;
+      background: transparent;
+    }
+
+    .slide img {
+      width: 70px;
+      height: 90px;
+      object-fit: cover;
+      border-radius: 8px;
+      flex-shrink: 0;
+    }
+
+    .slide .info {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 4px;
+    }
+
+    .slide h4 {
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .slide span {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .slide:hover,
+    .slide.active {
+      background: var(--bg-hover);
+    }
+    .slide.active {
+      border-left: 3px solid #fff;
+      padding-left: 12px;
+    }
+
+    .popular-section {
+      margin-top: 10px;
+      margin-bottom: 30px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+    }
+
+    .section-header h3 {
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    .section-header .view-all {
+      color: var(--text-muted);
+      font-size: 13px;
+      cursor: pointer;
+      transition: color .2s;
+    }
+    .section-header .view-all:hover { color: #fff; }
+
+    .category-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 22px;
+    }
+
+    .category-filters button {
+      background: var(--bg-panel);
+      border: 1px solid #2a2a2a;
+      color: var(--text-muted);
+      padding: 6px 18px;
+      border-radius: 40px;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all .2s;
+    }
+
+    .category-filters button:hover {
+      background: #2a2a2a;
+      color: #fff;
+    }
+    .category-filters button.active {
+      background: #fff;
+      color: #000;
+      border-color: #fff;
+    }
+
+    .anime-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+      gap: 24px;
+    }
+
+    .anime-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      transition: transform .2s, box-shadow .2s;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+
+    .anime-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 28px rgba(0,0,0,0.6);
+    }
+
+    .anime-card img {
+      width: 100%;
+      aspect-ratio: 2 / 3;
+      object-fit: cover;
+      display: block;
+    }
+
+    .anime-card .card-body {
+      padding: 12px 14px 14px;
+    }
+
+    .anime-card .card-body h4 {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .anime-card .card-body .meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .anime-card .card-body .meta .rating { color: #f5c518; }
+
+    .footer {
+      margin-top: auto;
+      padding-top: 28px;
+      border-top: 1px solid #222;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      color: var(--text-muted);
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .footer a {
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color .2s;
+    }
+    .footer a:hover { color: #fff; }
+    .footer .socials { display: flex; gap: 18px; }
+
+    @media (max-width: 1024px) {
+      .content {
+        grid-template-columns: 1fr;
+        height: auto;
+      }
+      .hero { height: 320px; }
+      .right-slider {
+        flex-direction: row;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        height: auto;
+        gap: 12px;
+        padding-bottom: 8px;
+      }
+      .slide {
+        flex: 0 0 200px;
+        background: var(--bg-panel);
+        border-radius: var(--radius-md);
+        padding: 10px;
+      }
+      .slide img { width: 60px; height: 80px; }
+      .slide.active { border-left: 3px solid #fff; }
+    }
+
+    @media (max-width: 768px) {
+      .sidebar { width: 70px; padding: 20px 10px; }
+      .sidebar .logo { font-size: 14px; letter-spacing: 0; text-align: center; }
+      .sidebar nav a span { display: none; }
+      .sidebar nav a { justify-content: center; padding: 12px; }
+      .sidebar-profile .user-info .name,
+      .sidebar-profile .user-info .status,
+      .sidebar-profile .profile-actions button span { font-size: 9px; }
+      .sidebar-profile .user { justify-content: center; }
+      .sidebar-profile .profile-actions { flex-direction: column; }
+      .main { padding: 16px; }
+      .topbar input { width: 100%; }
+      .anime-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
+      .hero h2 { font-size: 26px; }
+      .hero-bottom { left: 20px; right: 20px; bottom: 20px; }
+    }
+
+    @media (max-width: 480px) {
+      .sidebar { display: none; }
+      .anime-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+    }
+  </style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <h1 class="logo">AMINE</h1>
+  <nav>
+    <a class="active" data-page="home"><i data-lucide="store"></i><span>Mağaza</span></a>
+    <a data-page="explore"><i data-lucide="compass"></i><span>Keşfet</span></a>
+    <a data-page="series"><i data-lucide="tv"></i><span>Seriler</span></a>
+    <a data-page="favorites"><i data-lucide="heart"></i><span>Favoriler</span></a>
+  </nav>
+
+  <div class="sidebar-profile">
+    <div class="user">
+      <div class="avatar">B</div>
+      <div class="user-info">
+        <span class="name">Burak</span>
+        <span class="status">Çevrimiçi</span>
+      </div>
+    </div>
+    <div class="profile-actions">
+      <button id="profileBtn">
+        <i data-lucide="user"></i>
+        <span>Profil</span>
+      </button>
+      <button id="logoutBtn">
+        <i data-lucide="log-out"></i>
+        <span>Çıkış</span>
+      </button>
+    </div>
+  </div>
+</aside>
+
+<main class="main">
+
+  <header class="topbar">
+    <input type="text" id="searchInput" placeholder="Anime, film, dizi ara...">
+    <div class="profile-icon">B</div>
+  </header>
+
+  <section class="content" id="heroSection">
+    <div class="hero" id="hero">
+      <div class="hero-bg" id="heroBg" style="background-image: url('https://cdn.myanimelist.net/images/anime/5/63361.jpg');"></div>
+      <div class="hero-bottom">
+        <span class="tag" id="heroTag">ÖNE ÇIKAN</span>
+        <h2 id="heroTitle">Attack on Titan</h2>
+        <p id="heroDesc">İnsanlık, devasa yaratıklara karşı son umudunu arıyor.</p>
+        <button id="heroBtn">Daha Fazla Bilgi</button>
+      </div>
+    </div>
+
+    <aside class="right-slider" id="sliderContainer"></aside>
+  </section>
+
+  <section class="popular-section">
+    <div class="section-header">
+      <h3>🔥 Popüler Animeler</h3>
+      <span class="view-all">Tümünü gör →</span>
+    </div>
+
+    <div class="category-filters" id="categoryFilters">
+      <button class="active" data-category="all">Tümü</button>
+      <button data-category="action">Aksiyon</button>
+      <button data-category="adventure">Macera</button>
+      <button data-category="romance">Romantik</button>
+      <button data-category="comedy">Komedi</button>
+      <button data-category="drama">Dram</button>
+    </div>
+
+    <div class="anime-grid" id="animeGrid"></div>
+  </section>
+
+  <footer class="footer">
+    <span>© 2026 AMINE · github.com/senanto Tüm hakları saklıdır.</span>
+    <div class="socials">
+      <a href="#">Twitter</a>
+      <a href="#">Instagram</a>
+      <a href="https://github.com/senanto">GitHub</a>
+    </div>
+  </footer>
+
+</main>
+
+<script>
+  const sliderData = [
+    { id: 1, title: 'Attack on Titan', desc: 'İnsanlık, devasa yaratıklara karşı son umudunu arıyor.', tag: 'Aksiyon', img: 'https://m.media-amazon.com/images/M/MV5BZjliODY5MzQtMmViZC00MTZmLWFhMWMtMjMwM2I3OGY1MTRiXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg' },
+    { id: 2, title: 'Demon Slayer', desc: 'Ailesi katledilen bir gencin intikam yürüyüşü.', tag: 'Macera', img: 'https://cdn.myanimelist.net/images/anime/1286/99889.jpg' },
+    { id: 3, title: 'Jujutsu Kaisen', desc: 'Tehlikeli büyücüler ve lanetli ruhların savaşı.', tag: 'Korku', img: 'https://cdn.myanimelist.net/images/anime/1171/109222.jpg' },
+    { id: 4, title: 'One Piece', desc: 'Korsan kral olmak için çıkan efsanevi yolculuk.', tag: 'Macera', img: 'https://cdn.myanimelist.net/images/anime/6/73245.jpg' }
+  ];
+
+  const animeList = [
+    { title: 'Death Note', category: 'drama', rating: 9.0, img: 'https://cdn.myanimelist.net/images/anime/9/9453.jpg' },
+    { title: 'Chainsaw Man', category: 'action', rating: 9.1, img: 'https://cdn.myanimelist.net/images/anime/1806/126216.jpg' },
+    { title: 'Vinland Saga', category: 'drama', rating: 9.0, img: 'https://cdn.myanimelist.net/images/anime/1500/103005.jpg' },
+    { title: 'Kaguya-sama', category: 'comedy', rating: 8.7, img: 'https://cdn.myanimelist.net/images/anime/1295/106551.jpg' },
+    { title: 'Fullmetal Alchemist', category: 'adventure', rating: 9.2, img: 'https://cdn.myanimelist.net/images/anime/10/75815.jpg' },
+    { title: 'Bleach', category: 'action', rating: 8.7, img: 'https://cdn.myanimelist.net/images/anime/3/40451.jpg' },
+    { title: 'Naruto', category: 'action', rating: 8.8, img: 'https://cdn.myanimelist.net/images/anime/13/17405.jpg' },
+    { title: 'Spy x Family', category: 'comedy', rating: 8.9, img: 'https://cdn.myanimelist.net/images/anime/1441/122956.jpg' },
+    { title: 'Hunter x Hunter', category: 'adventure', rating: 9.1, img: 'https://cdn.myanimelist.net/images/anime/11/33657.jpg' },
+    { title: 'Your Lie in April', category: 'romance', rating: 8.8, img: 'https://cdn.myanimelist.net/images/anime/3/67177.jpg' },
+    { title: 'My Dress-Up Darling', category: 'romance', rating: 8.5, img: 'https://cdn.myanimelist.net/images/anime/1176/118776.jpg' },
+    { title: 'Steins;Gate', category: 'drama', rating: 9.1, img: 'https://cdn.myanimelist.net/images/anime/5/73199.jpg' }
+  ];
+
+  const hero = document.getElementById('hero');
+  const heroBg = document.getElementById('heroBg');
+  const heroTitle = document.getElementById('heroTitle');
+  const heroDesc = document.getElementById('heroDesc');
+  const heroTag = document.getElementById('heroTag');
+  const heroBtn = document.getElementById('heroBtn');
+  const sliderContainer = document.getElementById('sliderContainer');
+  const animeGrid = document.getElementById('animeGrid');
+  const searchInput = document.getElementById('searchInput');
+  const categoryBtns = document.querySelectorAll('.category-filters button');
+
+  let activeCategory = 'all';
+  let filteredAnime = [...animeList];
+  let sliderInterval = null;
+
+  function renderSlider() {
+    sliderContainer.innerHTML = '';
+    sliderData.forEach((item, index) => {
+      const div = document.createElement('div');
+      div.className = `slide ${index === 0 ? 'active' : ''}`;
+      div.dataset.id = item.id;
+      div.innerHTML = `
+        <img src="${item.img}" alt="${item.title}" loading="lazy">
+        <div class="info">
+          <h4>${item.title}</h4>
+          <span>${item.tag}</span>
+        </div>
+      `;
+      div.addEventListener('click', () => {
+        updateHero(item, div);
+        resetSliderInterval();
+      });
+      sliderContainer.appendChild(div);
+    });
+  }
+
+  function updateHero(data, activeEl) {
+    document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+    if (activeEl) activeEl.classList.add('active');
+
+    heroBg.style.opacity = '0';
+    setTimeout(() => {
+      heroBg.style.backgroundImage = `url('${data.img}')`;
+      heroBg.style.opacity = '0.35';
+    }, 150);
+
+    heroTitle.textContent = data.title;
+    heroDesc.textContent = data.desc;
+    heroTag.textContent = data.tag.toUpperCase();
+    heroBtn.textContent = `${data.title} İncele`;
+  }
+
+  function goToNextSlide() {
+    const slides = document.querySelectorAll('.slide');
+    if (slides.length === 0) return;
+    let activeIdx = 0;
+    slides.forEach((s, i) => { if (s.classList.contains('active')) activeIdx = i; });
+    const nextIdx = (activeIdx + 1) % slides.length;
+    const nextSlide = slides[nextIdx];
+    const nextData = sliderData[nextIdx];
+    updateHero(nextData, nextSlide);
+  }
+
+  function startSliderInterval() {
+    if (sliderInterval) clearInterval(sliderInterval);
+    sliderInterval = setInterval(goToNextSlide, 4000);
+  }
+
+  function resetSliderInterval() {
+    if (sliderInterval) {
+      clearInterval(sliderInterval);
+      sliderInterval = null;
+    }
+    startSliderInterval();
+  }
+
+  function renderAnime(list) {
+    animeGrid.innerHTML = '';
+    if (list.length === 0) {
+      animeGrid.innerHTML = '<p style="color: var(--text-muted); grid-column: 1/-1; text-align:center; padding: 40px 0;">Hiç sonuç bulunamadı.</p>';
+      return;
+    }
+    list.forEach(anime => {
+      const card = document.createElement('div');
+      card.className = 'anime-card';
+      card.innerHTML = `
+        <img src="${anime.img}" alt="${anime.title}" loading="lazy">
+        <div class="card-body">
+          <h4>${anime.title}</h4>
+          <div class="meta">
+            <span>${anime.category}</span>
+            <span class="rating">★ ${anime.rating}</span>
+          </div>
+        </div>
+      `;
+      card.addEventListener('click', () => {});
+      animeGrid.appendChild(card);
+    });
+  }
+
+  function filterAnime() {
+    const search = searchInput.value.toLowerCase().trim();
+    filteredAnime = animeList.filter(anime => {
+      const matchCategory = activeCategory === 'all' || anime.category === activeCategory;
+      const matchSearch = anime.title.toLowerCase().includes(search);
+      return matchCategory && matchSearch;
+    });
+    renderAnime(filteredAnime);
+  }
+
+  document.querySelectorAll('.sidebar nav a').forEach(link => {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      document.querySelectorAll('.sidebar nav a').forEach(l => l.classList.remove('active'));
+      this.classList.add('active');
+    });
+  });
+
+  document.getElementById('profileBtn').addEventListener('click', () => {});
+  document.getElementById('logoutBtn').addEventListener('click', () => {});
+
+  categoryBtns.forEach(btn => {
+    btn.addEventListener('click', function() {
+      categoryBtns.forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+      activeCategory = this.dataset.category;
+      filterAnime();
+    });
+  });
+
+  searchInput.addEventListener('input', filterAnime);
+  heroBtn.addEventListener('click', () => {});
+  document.querySelector('.view-all').addEventListener('click', () => {});
+
+  renderSlider();
+  const firstSlide = document.querySelector('.slide');
+  if (firstSlide) {
+    const firstData = sliderData[0];
+    updateHero(firstData, firstSlide);
+  }
+  renderAnime(animeList);
+  startSliderInterval();
+
+  lucide.createIcons();
+
+  window.addEventListener('beforeunload', () => {
+    if (sliderInterval) clearInterval(sliderInterval);
+  });
+</script>
+
+</body>
+</html>
