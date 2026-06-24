@@ -34,14 +34,7 @@ No installation is required:
 
 - This is a **template / preview** project. All buttons and links are visual and do not perform actual actions.
 - Anime data is for demonstration purposes; you can replace it with your own.
-- Images are sourced from MyAnimeList CDN.
-
-## 👨‍💻 Contributing
-
-Contributions are welcome! You can:
-- Add more anime entries,
-- Improve the design,
-- Integrate a real API.
+- Images are sourced from MyAnimeList CDN & IMDb.
 
 ---
 
